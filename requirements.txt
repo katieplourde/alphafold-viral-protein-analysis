@@ -1,0 +1,6 @@
+biopython: 1.81
+numpy: 1.23
+matplotlib: 3.7
+pandas: 1.5
+
+REQUIRES ColabFold INSTALLED SEPARATELY 
