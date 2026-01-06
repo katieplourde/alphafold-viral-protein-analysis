@@ -109,3 +109,7 @@ Domain 1 (Residues 1-4000)
       --fasta data/sequences.fasta \
       --colabfold-exe/home/"user"/localcolabfold/localcolabfold/colabfold-conda/bin/colabfold_batch
      
+## Next Steps
+- Continue to expand the reference library to make it more widely functional
+- Extend framework to enzymes, structural proteins, and other classes by additionally expanding the library and creating more if/elif/else attributes for specific analysis
+- Integrating additional biotech tools to improve visual analysis and analytical depth
