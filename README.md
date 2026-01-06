@@ -94,7 +94,7 @@ Domain 1 (Residues 1-4000)
 
 ## How to Run
 1. Copy and download pipeline
-2. Pip install ColabFold
+2. Pip install ColabFold and requirements.txt
 3. Run pipeline
    - cd ~/localcolabfold
      source localcolabfold/conda/etc/profile.d/conda.sh
