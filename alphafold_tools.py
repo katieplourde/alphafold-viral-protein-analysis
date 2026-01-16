@@ -5,6 +5,9 @@ import subprocess
 from typing import Dict, Optional, Tuple 
 
 import json
+import re
+
+STOP_CODONS = {"TAA", "TAG", "TGA"}
 
 GENETIC_CODE = {
     "ATA":"I", "ATC":"I", "ATT":"I", "ATG":"M",  #Reference to take the codon reading frame [i:i+3] to the proteins needed for a submittable FASTA file 
@@ -24,18 +27,49 @@ GENETIC_CODE = {
     "TAC":"Y", "TAT":"Y", "TAA":"STOP", "TAG":"STOP",
     "TGC":"C", "TGT":"C", "TGA":"STOP", "TGG":"W",
 }
+
+import re
 def translate_nuc_to_aa(nuc_seq: str, frame: int = 0):
-    nuc_seq = nuc_seq.upper().replace("U", "T") #If the found sequence is RNA puts it into DNA for the reference table , also uppercases it. small edits
+    nuc_seq = re.sub(r"[^ACGTUacgtu]", "", nuc_seq)
+    nuc_seq = nuc_seq.upper().replace("U","T")
+    
+     #If the found sequence is RNA puts it into DNA for the reference table , also uppercases it. small edits
     aas: list[str] = [] #begins with an empty frame
     for i in range(frame, len(nuc_seq) - 2,3):
         codon = nuc_seq [i:i+3] #previously referenced codon reading frame
         aa = GENETIC_CODE.get(codon, "X")
+        if aa == "X":
+            print(i, repr(codon), set(codon) - set("ACGT"))
         if aa == "STOP":
             break
         aas.append(aa) #append the amino acids
     return "".join(aas) #join together the retrieved amino acids 
 
+def find_longest_orf(nuc_seq: str):
+    seq = re.sub(r"[^ACGTUacgtu]", "", nuc_seq).upper().replace("U","T")
+    best_orf = ""
+    best_start = None
+    best_frame = None
 
+    for frame in range(3):
+        i = frame
+        while i <= len(seq) - 3:
+            if seq[i:i+3] == "ATG":
+                j = i
+                while j <= len(seq) - 3:
+                    if seq[j:j+3] in STOP_CODONS:
+                        orf = seq[i:j]
+                        if len(orf) > len(best_orf):
+                            best_orf = orf
+                            best_start = i
+                            best_frame = frame
+                        break
+                    j += 3
+                i = j+3
+            else:
+                i += 3
+
+    return best_orf, best_start, best_frame
 
 class SequenceRecord:
     """ 
@@ -154,7 +188,10 @@ class SequenceDatabase:
     def records(self):
         return self.records_by_accession.values() #the value associated with the key in the dictionary 
                 
-
+@dataclass
+class PTM:
+    pos: int
+    ccd: str
 
 class AlphaFoldManager: 
     """ Class will determine whether the sequence is under or over the maximum limit set by ColabFold, that being 1400 aa, and either:
@@ -179,7 +216,7 @@ class AlphaFoldManager:
         if region is None:
             seq = base_seq 
             id_part = record.accession
-            region_info = f"full_length = {record.length()}"
+            region_info = f"full_length = {len(seq)}"
         else: 
             start, end = region 
             seq = base_seq[start:end]
@@ -199,8 +236,80 @@ class AlphaFoldManager:
 
         return "\n".join(lines) #Joins the lines together
 
+    def make_af_server_job(
+        self, 
+        record: SequenceRecord, 
+        aa_seq: str, 
+        ptms: Optional[list[PTM]] = None, 
+        job_suffix: str = "", 
+    ) -> dict: 
+        ptms = ptms or []
+
+        job = {
+            "name": f"{record.accession}{job_suffix}",
+            "modelSeeds": [],
+            "sequences": [
+                {
+                    "proteinChain": {
+                        "sequence": aa_seq,
+                        "count": 1,
+                    }
+                }
+            ],
+            "dialect": "alphafoldserver",
+            "version": 1,
+        }
+
+        if ptms:
+            job["sequences"][0]["proteinChain"]["modifications"] = [
+                {
+                    "ptmType": f"CCD_{p.ccd}",
+                    "ptmPosition": p.pos,
+                }
+                for p in ptms
+            ]
+        return job
+        
+    
     def run_or_prepare(self, record: "SequenceRecord") -> Dict[str, object]:
-        aa_full = translate_nuc_to_aa(record.sequence)
+        orf_seq, start, frame = find_longest_orf(record.sequence)
+
+        if not orf_seq:
+            raise ValueError(f"No valid ORF found for accesion {record.accession}")
+
+        aa_full = translate_nuc_to_aa(orf_seq)
+
+        print(
+            f"[ORF] accession = {record.accession} "
+            f"start_nt={start+1} frame = {frame} "
+            f"nt_len={len(orf_seq)} aa_len={len(aa_full)}"
+        )
+
+        accession_outdir = self.results_dir / record.accession
+        accession_outdir.mkdir(parents=True, exist_ok=True)
+        
+        ptms: list[PTM] = []
+
+        baseline_job = self.make_af_server_job(
+            record,
+            aa_full, 
+            ptms=[],
+            job_suffix="_baseline",
+        )
+        
+        baseline_path = accession_outdir / f"{record.accession}_baseline.afserver.json"
+        baseline_path.write_text(json.dumps([baseline_job], indent=2))
+
+        ptm_path = None
+        if ptms:
+            ptm_job = self.make_af_server_job(
+                record, 
+                aa_full,
+                ptms=ptms,
+                job_suffix="_ptm",
+            )
+            ptm_path = accession_outdir / f"{record.accession}_ptm.afserver.json"
+            ptm_path.write_text(json.dumps([ptm_job], indent=2))
         
         if len(aa_full) > self.max_auto_len:  #Handles if the sequence cannot be registered into ColabFold and instead needs to output a JSON or copy and pasteable file for AlphaFold3 
         
@@ -209,7 +318,7 @@ class AlphaFoldManager:
             fasta_str = self.make_fasta(record, region=region, description="AlphaFold3_manual_input_protein", seq_override=aa_full,
             )
 
-            json_path = self.results_dir / f"{record.accession}_af3_manual.json" #make a JSON file for input into AlphaFold 3, makes the copy and pastable process faster 
+            json_path = accession_outdir / f"{record.accession}_af3_manual.json" #make a JSON file for input into AlphaFold 3, makes the copy and pastable process faster 
             json_data = {                           #The data needed in the JSON file 
                 "mode": "manual_af3",
                 "accession": record.accession,
@@ -221,7 +330,7 @@ class AlphaFoldManager:
             }
             json_path.write_text(json.dumps(json_data, indent=2))
 
-            manual_fasta_path = self.results_dir / f"{record.accession}_af3_manual.fasta"
+            manual_fasta_path = accession_outdir / f"{record.accession}_af3_manual.fasta"
             manual_fasta_path.write_text(fasta_str)
             
             msg_lines = [ 
@@ -233,6 +342,8 @@ class AlphaFoldManager:
                 fasta_str,
                 "",
                 f"(Metadata + FASTA also saved to {json_path})", 
+                "",
+                f"(Baseline AF-Server JSON saved to {baseline_path})",
             ]
             
             return {
@@ -240,18 +351,19 @@ class AlphaFoldManager:
                 "message": "\n".join(msg_lines),
                 "fasta": fasta_str,
                 "fasta_path": None,
-                "results_dir": None,
-                "json_path": json_path,
+                "results_dir": str(accession_outdir),
+                "json_path": str(json_path),
+                "baseline_json": str(baseline_path),
+                "ptm_json": str(ptm_path) if ptm_path else None,
                 "aa_sequence": aa_full,
             }
 #The second case in which it is acceptable for ColabFold and is directly run into it
-        fasta_path = self.results_dir / f"{record.accession}.fasta" #Creates the path 
+        fasta_path = accession_outdir / f"{record.accession}.fasta" #Creates the path 
         fasta_str = self.make_fasta(record, seq_override=aa_full) #Generates and writes the FASTA file
         fasta_path.write_text(fasta_str)
 #This is the subprocess command, the call for ColabFold
 
-        accession_outdir = self.results_dir / record.accession
-        accession_outdir.mkdir(parents=True, exist_ok=True)
+    
         
         cmd = [
             self.colabfold_exe, 
@@ -263,6 +375,7 @@ class AlphaFoldManager:
 
         try: 
             completed = subprocess.run(cmd, check = False)
+            print("[AlphaFoldManager] ColabFold finished with return code:", completed.returncode)
 
             if completed.returncode != 0:
                 msg = (
@@ -270,24 +383,30 @@ class AlphaFoldManager:
                     f"({completed.returncode}).\n"
                     "Falling back to manual AlphaFold3 FASTA/JSON output.\n"
                 )
-            msg = (
-                f"Ran ColabFold on {record.accession} ({len(aa_full)} aa).\n"
-                f"FASTA file: {fasta_path}\n"
-                f"Results directory: {self.results_dir}"
-            )
+            else:
+                msg = (
+                    f"Ran ColabFold on {record.accession} ({len(aa_full)} aa).\n"
+                    f"FASTA file: {fasta_path}\n"
+                    f"Results directory: {self.results_dir}"
+                )
             return {
-                "mode": "colabfold_run",
+                "mode": "ColabFold",
                 "message": msg,
                 "fasta": fasta_str,
                 "fasta_path": fasta_path, 
-                "results_dir": self.results_dir, 
+                "results_dir": self.results_dir,
+                "baseline_json": str(baseline_path),
+                "ptm_json": str(ptm_path) if ptm_path else None,
+                "returncode": completed.returncode,
             }
         except FileNotFoundError: #Arises when colabfold_batch is not installed, so will not work on a laptop or system unless the program is downloaded 
-            msg = (
-                "ERROR: 'colabfold_batch' executable was not found.\n"
-            )
-            print(msg)
-            return manual_af3_output()
+            return {
+                "mode": "error",
+                "message": "ERROR: colabfold_batch executable was not found.",
+                "baseline_json": str(baseline_path),
+                "ptm_json": str(ptm_path) if ptm_path else None,
+            }
+                
     
 def run_tools( #Runs all the tools created above
     fasta_path: str, 
@@ -295,7 +414,7 @@ def run_tools( #Runs all the tools created above
     max_auto_len: int = 1400, 
     colabfold_exe: str = "colabfold_batch",  #Again the sequence maximum is 1400 
 ):
-    db = SequenceDatabase("data/sequences.fasta") #uploads the data file 
+    db = SequenceDatabase(fasta_path) #uploads the data file 
     db.load()
 
     if accession is not None:
@@ -381,3 +500,4 @@ if __name__ == "__main__":
     main()
 
   
+
