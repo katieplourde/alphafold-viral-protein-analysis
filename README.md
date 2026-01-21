@@ -31,10 +31,10 @@ High pLDDT regions (>90) are considered structurally reliable, while low-confide
 
 
 ## Output Visualization  
-
-Accession: KU343156
-Virus: Farallon virus isolate CalAr846 cRNA
-Segment: S
+<small>
+  Accession: KU343156
+  Virus: Farallon virus isolate CalAr846 cRNA
+  Segment: S
 ------------------------------------------------------------------------------------------------------------------------
 [ORF] accession = KU343156 start_nt=87 frame = 2 nt_len=1482 aa_len=494
 [AlphaFoldManager] Running: /home/katie/localcolabfold/localcolabfold/colabfold-conda/bin/colabfold_batch colabfold_results/KU343156/KU343156.fasta colabfold_results/KU343156
@@ -80,7 +80,7 @@ Domains:
 Domain 1 (Residues 1-259)
 Domain 2 (Residues 267-632)
 ========================================================================================================================
-
+<small>
 ### Cases too large for ColabFold
 A primary limitation of this project arises from ColabFold’s sequence token limitations. For inputs that exceed this threshold, the pipeline transitions to a manual AlphaFold execution, producing baseline JSON outputs and enabling continued structural and functional analysis without reliance on ColabFold.
 
