@@ -80,10 +80,10 @@ Domains:
 Domain 1 (Residues 1-259)
 Domain 2 (Residues 267-632)
 
-## Cases too large for ColabFold
+# Cases too large for ColabFold
 A primary limitation of this project arises from ColabFold’s sequence token limitations. For inputs that exceed this threshold, the pipeline transitions to a manual AlphaFold execution, producing baseline JSON outputs and enabling continued structural and functional analysis without reliance on ColabFold.
 
-#### Example Manual AlphaFold Output 
+## Example Manual AlphaFold Output 
 Accession: MT153554
 Virus: Red goblin roach virus 1 isolate OKIAV321 cRNA
 Segment: L
