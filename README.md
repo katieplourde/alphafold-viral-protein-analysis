@@ -17,7 +17,7 @@ PIPELINE: Prompts accession ID --> Search library for FASTA nucleotide sequence 
 ### Example Output
 KU343156 Farallon virus isolate CalAr846 cRNA segment S
 python combined_tools.py --accession KU343156
-###Predicted Protein Structure 
+### Predicted Protein Structure 
 <img width="554" height="899" alt="376D848E94F34279" src="https://github.com/user-attachments/assets/fb22d216-1f37-4661-bd4e-e84b212b872f" />
 
 <img width="1347" height="939" alt="KU343156_virus__Farallon_virus_isolate_CalAr846_cRNA_segment___S_full_length___494_coverage" src="https://github.com/user-attachments/assets/e81bb918-9ea9-4e47-92e4-df3f83b43d01" />
@@ -40,50 +40,6 @@ Segment: S
 [AlphaFoldManager] Running: /home/katie/localcolabfold/localcolabfold/colabfold-conda/bin/colabfold_batch colabfold_results/KU343156/KU343156.fasta colabfold_results/KU343156
 2026-01-18 20:25:08,390 Running colabfold 1.5.5 (83ee93d262a99ad62d6f0897c5ddd37eb918d385)
 
-WARNING: You are welcome to use the default MSA server, however keep in mind that it's a
-limited shared resource only capable of processing a few thousand MSAs per day. Please
-submit jobs only from a single IP address. We reserve the right to limit access to the
-server case-by-case when usage exceeds fair use. If you require more MSAs: You can
-precompute all MSAs with `colabfold_search` or host your own API and pass it to `--host-url`
-
-2026-01-18 20:25:08,670 WARNING: no GPU detected, will be using CPU
-2026-01-18 20:25:09,051 Found 5 citations for tools or databases
-2026-01-18 20:25:09,058 Query 1/1: KU343156_virus__Farallon_virus_isolate_CalAr846_cRNA_segment___S_full_length___494 (length 494)
-2026-01-18 20:25:09,991 Setting max_seq=148, max_extra_seq=1
-WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1768796738.206317    7511 mlir_graph_optimization_pass.cc:437] MLIR V1 optimization pass is not enabled
-2026-01-18 20:49:05,675 alphafold2_ptm_model_1_seed_000 recycle=0 pLDDT=82.9 pTM=0.742
-2026-01-18 21:12:12,444 alphafold2_ptm_model_1_seed_000 recycle=1 pLDDT=87.5 pTM=0.782 tol=4.75
-2026-01-18 21:45:55,748 alphafold2_ptm_model_1_seed_000 recycle=2 pLDDT=87.8 pTM=0.777 tol=0.473
-2026-01-18 22:10:56,352 alphafold2_ptm_model_1_seed_000 recycle=3 pLDDT=87.9 pTM=0.775 tol=0.228
-2026-01-18 22:10:56,402 alphafold2_ptm_model_1_seed_000 took 6316.2s (3 recycles)
-2026-01-18 22:28:24,324 alphafold2_ptm_model_2_seed_000 recycle=0 pLDDT=83.9 pTM=0.75
-2026-01-18 22:45:33,668 alphafold2_ptm_model_2_seed_000 recycle=1 pLDDT=87.1 pTM=0.767 tol=1.88
-2026-01-18 23:02:43,967 alphafold2_ptm_model_2_seed_000 recycle=2 pLDDT=86.9 pTM=0.762 tol=0.508
-2026-01-18 23:19:54,404 alphafold2_ptm_model_2_seed_000 recycle=3 pLDDT=87.1 pTM=0.765 tol=1.2
-2026-01-18 23:19:54,433 alphafold2_ptm_model_2_seed_000 took 4137.4s (3 recycles)
-2026-01-18 23:37:01,452 alphafold2_ptm_model_3_seed_000 recycle=0 pLDDT=86.5 pTM=0.771
-2026-01-18 23:54:12,326 alphafold2_ptm_model_3_seed_000 recycle=1 pLDDT=88.6 pTM=0.785 tol=1.03
-2026-01-19 00:11:28,893 alphafold2_ptm_model_3_seed_000 recycle=2 pLDDT=89.2 pTM=0.792 tol=0.449
-2026-01-19 00:28:42,845 alphafold2_ptm_model_3_seed_000 recycle=3 pLDDT=89.5 pTM=0.802 tol=0.264
-2026-01-19 00:28:42,904 alphafold2_ptm_model_3_seed_000 took 4127.8s (3 recycles)
-2026-01-19 00:46:00,942 alphafold2_ptm_model_4_seed_000 recycle=0 pLDDT=86.8 pTM=0.772
-2026-01-19 01:03:16,402 alphafold2_ptm_model_4_seed_000 recycle=1 pLDDT=88.6 pTM=0.771 tol=1.42
-2026-01-19 01:20:28,734 alphafold2_ptm_model_4_seed_000 recycle=2 pLDDT=88.5 pTM=0.767 tol=0.676
-2026-01-19 01:37:43,206 alphafold2_ptm_model_4_seed_000 recycle=3 pLDDT=88.7 pTM=0.765 tol=0.345
-2026-01-19 01:37:43,238 alphafold2_ptm_model_4_seed_000 took 4139.7s (3 recycles)
-2026-01-19 01:55:00,564 alphafold2_ptm_model_5_seed_000 recycle=0 pLDDT=85.8 pTM=0.771
-2026-01-19 02:12:26,218 alphafold2_ptm_model_5_seed_000 recycle=1 pLDDT=87.8 pTM=0.794 tol=1.33
-2026-01-19 02:29:49,468 alphafold2_ptm_model_5_seed_000 recycle=2 pLDDT=87.8 pTM=0.786 tol=0.43
-2026-01-19 02:47:07,289 alphafold2_ptm_model_5_seed_000 recycle=3 pLDDT=87.9 pTM=0.792 tol=0.775
-2026-01-19 02:47:07,335 alphafold2_ptm_model_5_seed_000 took 4163.6s (3 recycles)
-2026-01-19 02:47:07,862 reranking models by 'plddt' metric
-2026-01-19 02:47:07,874 rank_001_alphafold2_ptm_model_3_seed_000 pLDDT=89.5 pTM=0.802
-2026-01-19 02:47:07,906 rank_002_alphafold2_ptm_model_4_seed_000 pLDDT=88.7 pTM=0.765
-2026-01-19 02:47:07,929 rank_003_alphafold2_ptm_model_5_seed_000 pLDDT=87.9 pTM=0.792
-2026-01-19 02:47:07,954 rank_004_alphafold2_ptm_model_1_seed_000 pLDDT=87.9 pTM=0.775
-2026-01-19 02:47:07,970 rank_005_alphafold2_ptm_model_2_seed_000 pLDDT=87.1 pTM=0.765
-2026-01-19 02:47:13,771 Done
 [AlphaFoldManager] ColabFold finished with return code: 0
 [AlphaFoldTools]
 Mode: ColabFold
@@ -123,6 +79,121 @@ Hydrophobic Core Residues (indices):
 Domains:
 Domain 1 (Residues 1-259)
 Domain 2 (Residues 267-632)
+========================================================================================================================
+
+### Cases too large for ColabFold
+A primary limitation of this project arises from ColabFold’s sequence token limitations. For inputs that exceed this threshold, the pipeline transitions to a manual AlphaFold execution, producing baseline JSON outputs and enabling continued structural and functional analysis without reliance on ColabFold.
+
+## Example Manual AlphaFold Output 
+Accession: MT153554
+Virus: Red goblin roach virus 1 isolate OKIAV321 cRNA
+Segment: L
+------------------------------------------------------------------------------------------------------------------------
+[ORF] accession = MT153554 start_nt=62 frame = 1 nt_len=12045 aa_len=4015
+[AlphaFoldTools]
+Mode: manual_af3
+Sequence MT153554 translated to protein is 4015 aa,
+which exceeds the automated limit of 1400 aa.
+
+Copy and Paste the FASTA below into AlphaFold3 web:
+
+>MT153554_1_1400 virus: Red_goblin_roach_virus_1_isolate_OKIAV321_cRNA segment = L residues=1-1400 AlphaFold3_manual_input_protein
+MEMEVTGTGTEPNSLGSNNDPGESSVEKNVPAVGFIRDIFIFHMDFFLNLSTNVIRLGVETDMQADEIKI
+KGRRLIEELRKSNRPVMYRLIDSQMISTIYVLEGILNHKNWMSMIDNYHSQTLKLVGITTYILGSILLAA
+RPEDEYIVDMMVVQVGRPELLSVFNKILTDWKAFTKRLKEMIDILYGDRHRKIIGIIQACPKTMLDVTSV
+MEIRKVHSVDKWETIMLETAGAYTVNQATNNEKVNNLLKVVKEVKNIFYGPEYSSPNREVQFESRRQLSK
+VIENYHNSQQVSKSLREFGIVSSANTISSLVTEVIRALDGGDNSREDSLSLGSLKSELMQMIDSSKQWPP
+HVMFRILQRDLEPLFEVISPSYKQLLDDSISRSIMSASYPEAWNNAVKIKGLLYEICFAETFGLPYAPEV
+SKLTLNQIVHILYPNAATTFLRRSAEKHMIRDYKPDFFVPYDPIRLEPRRPRFTRPNLTKSAERFYKTGQ
+TEPVGPEEDENPVIKWLKNTVDINTKLARLLREVTTARERKYKFNRGGVEDKILSDQEVFSKSGLVIIEV
+GYQTSSESKTIIDSRKWKAAANILSSCGIDCTILTLSESTQEMKVDSWLRKDLSTLVSKAVGSLFSKLIA
+TMPPSLSNILVGDISSQQLRSLSSEFRPKTCPVSKGDLIDCHVQNKAKLFIRPNGTHLPLHFQRKFVKSL
+ITGSLIKESDAHRVKEHLSRNATSIIESVDQSNLCLTKVDDCSPYLFYYSYMKEELESVLERTNVCHELK
+KLASECNTACKQLINCLKKEDLSDIDASKFKLRTSLSNFIIRKGHHRSIVLHNCGVSEADRCTIPAIFRL
+LHLCGTKKIQVRYSKDDRYVDEVTKSSIDSVSSLTLPGRNAKQKETKGIIRSILETISGLSQDGFLKTES
+GLLLSTHKDILLKSNCITGVETGVEKVQVEEEYKIREESTSSQAAPRERKATTVKKQILEKLDSVLKRRD
+CLTEEAVESLSRMREDIRSTRVTESDKGHQLFKQLRVSSYIHGQALLDSMHLLLFDSVHTDPLKIFFKGK
+EEKAKQMKLKEERESDYRLVSDNMLSDHLSLCESLTEILENETEIEIIPEVVLKQVRESIQPTTPAGVAW
+ESAQKALDIIRHTRLGRALRLYSYICQTFLIAVSDMSFGGIKVLKVMNSSTNILIQVGKSKATNCPCILM
+DEGMNSITPRFYLNRSVATLGQSLMACVFTNFVQLMQTSSCFDLLSMPLSDILVKVAEHLPEAVTRIGKF
+ISDSIRQGYNESTAESLYGSGTMPWELPKPEGQIDRQSQLIACHLACLCFVIVPGVIRNSRKDNKVLQMV
+RHPYMLSLSDFGFPLGVGAKLSSPIRNTCTLVLSRFLAQVCCINLEFAKPKLEEWTKSNWRPTSNTVSIS
+
+(Metadata + FASTA also saved to colabfold_results/MT153554/MT153554_af3_manual.json)
+
+(Baseline AF-Server JSON saved to colabfold_results/MT153554/MT153554_baseline.afserver.json)
+------------------------------------------------------------------------------------------------------------------------
+  High pLDDT: 4183
+  Low pLDDT:  0
+------------------------------------------------------------------------------------------------------------------------
+[Sequence / Structure Analysis Report]
+--- Structural Summary ---
+File: MT153554
+Total Residues: 4183
+Peptide Preview: XPRATKXXPXXRXXXRXXXQXGXGXXRHRDRTXXXGXXXRXRXXXXXKEXXXXRXXQGXX...
+
+Motifs:
+N-glycosylation at position 1133
+Phosphorylation at position 731
+Phosphorylation at position 974
+Phosphorylation at position 1351
+Phosphorylation at position 1584
+Basic cluster at position 1528
+Basic cluster at position 3884
+RNA-binding at position 159
+RNA-binding at position 247
+RNA-binding at position 557
+RNA-binding at position 844
+RNA-binding at position 904
+RNA-binding at position 1080
+RNA-binding at position 1106
+RNA-binding at position 1513
+RNA-binding at position 1863
+RNA-binding at position 1935
+RNA-binding at position 2048
+RNA-binding at position 2699
+RNA-binding at position 2898
+RNA-binding at position 2928
+RNA-binding at position 2932
+RNA-binding at position 2955
+RNA-binding at position 3044
+RNA-binding at position 3048
+RNA-binding at position 3093
+RNA-binding at position 3558
+RNA-binding at position 3674
+RNA-binding at position 3703
+RNA-binding at position 3993
+RNA-binding at position 4017
+RNA-binding at position 4021
+RNA-binding at position 4080
+RNA-binding at position 4095
+Protease cleavage sight at position 56
+Protease cleavage sight at position 287
+Protease cleavage sight at position 419
+Protease cleavage sight at position 1026
+Protease cleavage sight at position 1537
+Protease cleavage sight at position 2029
+Protease cleavage sight at position 2343
+Protease cleavage sight at position 2473
+
+Secondary Structure Summary:
+-- Alpha Helices: 758 residues
+-- Beta-Sheets: 121 residues
+-- Coils/Loops: 3304 residues
+
+Disordered Regions:
+None
+
+Overall plDDT Confidence
+-- High Confidence (>90) residues: 4183
+-- Low Confidence (<50) residues: 0
+
+Hydrophobic Core Residues (indices):
+1, 3, 8, 21, 23, 35, 57, 62, 64, 79, 83, 97, 108, 113, 138, 158, 199, 209, 217, 218, 220, 231, 242, 257, 288, 290, 308, 332, 338, 341, 345, 346, 351, 359, 368, 369, 377, 379, 389, 393, 396, 409, 420, 434, 467, 479, 486, 487, 509, 512, 517, 521, 542, 566, 567, 598, 625, 652, 661, 662, 667, 681, 685, 691, 693, 696, 732, 736, 776, 780, 792, 810, 841, 877, 880, 910, 914, 921, 967, 973, 975, 980, 999, 1004, 1027, 1033, 1044, 1050, 1061, 1068, 1071, 1075, 1097, 1124, 1138, 1140, 1157, 1195, 1197, 1201, 1205, 1210, 1235, 1246, 1257, 1268, 1286, 1287, 1303, 1305, 1307, 1311, 1312, 1315, 1333, 1342, 1352, 1373, 1387, 1399, 1422, 1444, 1446, 1450, 1451, 1454, 1465, 1467, 1469, 1494, 1496, 1510, 1520, 1533, 1536, 1538, 1544, 1551, 1559, 1564, 1579, 1585, 1586, 1589, 1606, 1644, 1653, 1693, 1696, 1742, 1755, 1764, 1790, 1794, 1806, 1813, 1830, 1855, 1864, 1881, 1886, 1925, 1932, 1949, 1951, 1955, 1972, 1989, 2020, 2026, 2027, 2030, 2049, 2071, 2081, 2083, 2084, 2091, 2095, 2102, 2112, 2120, 2141, 2154, 2179, 2239, 2246, 2256, 2273, 2277, 2279, 2289, 2334, 2338, 2339, 2344, 2374, 2380, 2393, 2394, 2434, 2441, 2444, 2474, 2479, 2486, 2492, 2494, 2495, 2498, 2499, 2501, 2523, 2534, 2560, 2576, 2582, 2606, 2611, 2623, 2632, 2633, 2634, 2641, 2646, 2660, 2675, 2686, 2707, 2717, 2729, 2738, 2741, 2746, 2750, 2756, 2767, 2768, 2808, 2810, 2831, 2839, 2843, 2854, 2857, 2868, 2872, 2896, 2902, 2918, 2921, 2939, 2985, 3009, 3036, 3043, 3063, 3065, 3144, 3162, 3178, 3183, 3186, 3192, 3193, 3233, 3238, 3248, 3277, 3286, 3291, 3307, 3316, 3317, 3328, 3333, 3355, 3356, 3357, 3369, 3374, 3375, 3383, 3392, 3394, 3395, 3401, 3435, 3446, 3452, 3458, 3489, 3508, 3509, 3510, 3511, 3573, 3599, 3604, 3610, 3617, 3625, 3628, 3645, 3648, 3675, 3716, 3752, 3774, 3806, 3828, 3836, 3852, 3870, 3888, 3917, 3934, 3952, 3955, 3970, 3974, 3980, 3989, 4004, 4005, 4006, 4023, 4037, 4038, 4040, 4046, 4056, 4069, 4074, 4091, 4123, 4181, 4182
+
+--- Domain Analysis ---
+Domains:
+Domain 1 (Residues 1-4183)
 ========================================================================================================================
 
 ## Features
